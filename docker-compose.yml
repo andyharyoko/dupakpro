@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dupak-app
+    container_name: dupak-app-container
+    ports:
+      - "8001:8000" # Mapped to 8001 on host to avoid conflict with `php artisan serve` if it's running
+    volumes:
+      - .:/app
+    environment:
+      - APP_ENV=local
+    restart: unless-stopped
