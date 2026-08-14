@@ -13,7 +13,7 @@ class DupakDataSeeder extends Seeder
      */
     public function run(): void
     {
-        $tsvFile = base_path('../Data_Perbaikan_LKD.tsv');
+        $tsvFile = __DIR__ . '/Data_Perbaikan_LKD.tsv';
         if (!File::exists($tsvFile)) {
             $this->command->error("File $tsvFile not found!");
             return;
