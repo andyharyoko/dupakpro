@@ -55,4 +55,29 @@ class PengabdianController extends Controller
         }
         return redirect()->route('pengabdian.index')->with('success', 'Semua data pengabdian semester ini berhasil dihapus');
     }
+
+    public function edit(Pengabdian $pengabdian)
+    {
+        if ($pengabdian->user_id != Auth::id()) abort(403);
+        return view('pengabdian.edit', compact('pengabdian'));
+    }
+
+    public function update(Request $request, Pengabdian $pengabdian)
+    {
+        if ($pengabdian->user_id != Auth::id()) abort(403);
+        
+        $request->validate([
+            'uraian_kegiatan' => 'required|string',
+            'semester' => 'nullable|string',
+            'volume' => 'required|numeric',
+            'angka_kredit' => 'required|numeric',
+        ]);
+        
+        $data = $request->all();
+        $data['jumlah_angka_kredit'] = $data['volume'] * $data['angka_kredit'];
+        
+        $pengabdian->update($data);
+        
+        return redirect()->route('pengabdian.index')->with('success', 'Data berhasil diperbarui');
+    }
 }

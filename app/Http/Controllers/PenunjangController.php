@@ -55,4 +55,29 @@ class PenunjangController extends Controller
         }
         return redirect()->route('penunjang.index')->with('success', 'Semua data penunjang semester ini berhasil dihapus');
     }
+
+    public function edit(Penunjang $penunjang)
+    {
+        if ($penunjang->user_id != Auth::id()) abort(403);
+        return view('penunjang.edit', compact('penunjang'));
+    }
+
+    public function update(Request $request, Penunjang $penunjang)
+    {
+        if ($penunjang->user_id != Auth::id()) abort(403);
+        
+        $request->validate([
+            'uraian_kegiatan' => 'required|string',
+            'semester' => 'nullable|string',
+            'volume' => 'required|numeric',
+            'angka_kredit' => 'required|numeric',
+        ]);
+        
+        $data = $request->all();
+        $data['jumlah_angka_kredit'] = $data['volume'] * $data['angka_kredit'];
+        
+        $penunjang->update($data);
+        
+        return redirect()->route('penunjang.index')->with('success', 'Data berhasil diperbarui');
+    }
 }

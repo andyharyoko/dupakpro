@@ -56,4 +56,29 @@ class PendidikanController extends Controller
         }
         return redirect()->route('pendidikan.index')->with('success', 'Semua data pendidikan semester ini berhasil dihapus');
     }
+
+    public function edit(Pendidikan $pendidikan)
+    {
+        if ($pendidikan->user_id != Auth::id()) abort(403);
+        return view('pendidikan.edit', compact('pendidikan'));
+    }
+
+    public function update(Request $request, Pendidikan $pendidikan)
+    {
+        if ($pendidikan->user_id != Auth::id()) abort(403);
+        
+        $request->validate([
+            'uraian_kegiatan' => 'required|string',
+            'semester' => 'nullable|string',
+            'volume' => 'required|numeric',
+            'angka_kredit' => 'required|numeric',
+        ]);
+        
+        $data = $request->all();
+        $data['jumlah_angka_kredit'] = $data['volume'] * $data['angka_kredit'];
+        
+        $pendidikan->update($data);
+        
+        return redirect()->route('pendidikan.index')->with('success', 'Data berhasil diperbarui');
+    }
 }

@@ -55,4 +55,29 @@ class PenelitianController extends Controller
         }
         return redirect()->route('penelitian.index')->with('success', 'Semua data penelitian semester ini berhasil dihapus');
     }
+
+    public function edit(Penelitian $penelitian)
+    {
+        if ($penelitian->user_id != Auth::id()) abort(403);
+        return view('penelitian.edit', compact('penelitian'));
+    }
+
+    public function update(Request $request, Penelitian $penelitian)
+    {
+        if ($penelitian->user_id != Auth::id()) abort(403);
+        
+        $request->validate([
+            'uraian_kegiatan' => 'required|string',
+            'semester' => 'nullable|string',
+            'volume' => 'required|numeric',
+            'angka_kredit' => 'required|numeric',
+        ]);
+        
+        $data = $request->all();
+        $data['jumlah_angka_kredit'] = $data['volume'] * $data['angka_kredit'];
+        
+        $penelitian->update($data);
+        
+        return redirect()->route('penelitian.index')->with('success', 'Data berhasil diperbarui');
+    }
 }
