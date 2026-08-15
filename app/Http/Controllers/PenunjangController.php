@@ -10,7 +10,7 @@ class PenunjangController extends Controller
 {
     public function index()
     {
-        $data = Penunjang::with('buktis')->where('user_id', Auth::id())->get();
+        $data = Penunjang::with('buktis')->where('user_id', Auth::id())->orderBy('semester', 'desc')->get()->groupBy('semester');
         return view('penunjang.index', compact('data'));
     }
 
@@ -41,5 +41,18 @@ class PenunjangController extends Controller
             $penunjang->delete();
         }
         return redirect()->route('penunjang.index')->with('success', 'Data berhasil dihapus');
+    }
+
+    public function destroySemester(Request $request, $semester)
+    {
+        $decodedSemester = urldecode($semester);
+        if ($decodedSemester === 'Tanpa Semester') {
+            Penunjang::where('user_id', Auth::id())->where(function($q) {
+                $q->whereNull('semester')->orWhere('semester', '');
+            })->delete();
+        } else {
+            Penunjang::where('user_id', Auth::id())->where('semester', $decodedSemester)->delete();
+        }
+        return redirect()->route('penunjang.index')->with('success', 'Semua data penunjang semester ini berhasil dihapus');
     }
 }

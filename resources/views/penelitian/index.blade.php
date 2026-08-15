@@ -58,10 +58,22 @@
                 </form>
 
                 <h3 class="text-lg font-bold mb-4">Data Penelitian</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-left text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
+                @foreach($data as $semester => $items)
+                <div class="mb-8">
+                    <div class="flex justify-between items-center bg-gray-100 p-2 rounded mb-2">
+                        <h4 class="text-md font-semibold text-gray-700">{{ $semester ?: 'Tanpa Semester' }}</h4>
+                        <form action="{{ route('penelitian.destroySemester', urlencode($semester ?: 'Tanpa Semester')) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus SEMUA data Penelitian pada semester ini?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-700 bg-red-100 hover:bg-red-200 border border-red-200 px-3 py-1 rounded shadow-sm transition-colors text-xs font-bold">
+                                Hapus Semua
+                            </button>
+                        </form>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
                                 <th class="px-4 py-2">Uraian</th>
                                 <th class="px-4 py-2">Semester</th>
                                                                 <th class="px-4 py-2">Satuan</th>
@@ -73,7 +85,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($data as $item)
+                            @foreach($items as $item)
                             <tr class="bg-white border-b">
                                 <td class="px-4 py-2">{{ $item->uraian_kegiatan }}</td>
                                 <td class="px-4 py-2">{{ $item->semester }}</td>
@@ -117,6 +129,8 @@
                         </tbody>
                     </table>
                 </div>
+                </div>
+                @endforeach
 
             </div>
         </div>

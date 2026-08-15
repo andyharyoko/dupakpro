@@ -6,16 +6,13 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('penunjangs', function (Blueprint $table) {
+        Schema::create('kewajiban_khususes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->text('uraian_kegiatan');
-            $table->date('tanggal')->nullable();
+            $table->string('semester')->nullable();
             $table->string('satuan_hasil')->nullable();
             $table->decimal('volume', 8, 2)->default(0);
             $table->decimal('angka_kredit', 8, 2)->default(0);
@@ -25,11 +22,8 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('penunjangs');
+        Schema::dropIfExists('kewajiban_khususes');
     }
 };

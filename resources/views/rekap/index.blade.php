@@ -12,9 +12,9 @@
                         Unduh File Excel
                     </button>
                 </form>
-                <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded shadow">
-                    Cetak / Simpan PDF
-                </button>
+                <a href="{{ route('rekap.cetakResmi') }}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded shadow flex items-center justify-center">
+                    Cetak DUPAK Resmi
+                </a>
             </div>
 
         </div>
@@ -87,6 +87,7 @@
                                     <th class="border p-2 text-center w-24">Pengabdian</th>
                                     <th class="border p-2 text-center w-24">Penunjang</th>
                                     <th class="border p-2 text-center w-32 font-bold bg-indigo-50 print:bg-gray-100">Jumlah AK</th>
+                                    <th class="border p-2 text-center w-24 print-hide">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -98,10 +99,19 @@
                                     <td class="border p-2 text-center">{{ number_format($row['pengabdian'], 2) }}</td>
                                     <td class="border p-2 text-center">{{ number_format($row['penunjang'], 2) }}</td>
                                     <td class="border p-2 text-center font-bold text-indigo-700">{{ number_format($row['total'], 2) }}</td>
+                                    <td class="border p-2 text-center print-hide">
+                                        <form action="{{ route('rekap.destroySemester', urlencode($row['semester'])) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus SEMUA data Tridharma pada semester {{ $row['semester'] }}? Tindakan ini tidak dapat dibatalkan.');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-700 bg-red-100 hover:bg-red-200 border border-red-200 px-3 py-1 rounded shadow-sm transition-colors text-xs font-bold">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="6" class="border p-2 text-center text-gray-500 italic">Belum ada data kegiatan.</td>
+                                    <td colspan="7" class="border p-2 text-center text-gray-500 italic">Belum ada data kegiatan.</td>
                                 </tr>
                                 @endforelse
                             </tbody>
@@ -113,6 +123,7 @@
                                     <th class="border p-2 text-center font-bold text-indigo-900">{{ number_format($grand_totals['pengabdian'], 2) }}</th>
                                     <th class="border p-2 text-center font-bold text-indigo-900">{{ number_format($grand_totals['penunjang'], 2) }}</th>
                                     <th class="border p-2 text-center font-bold text-xl text-indigo-900">{{ number_format($grand_totals['total'], 2) }}</th>
+                                    <th class="border print-hide"></th>
                                 </tr>
                             </tfoot>
                         </table>

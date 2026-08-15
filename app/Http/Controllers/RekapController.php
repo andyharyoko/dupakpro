@@ -221,7 +221,44 @@ class RekapController extends Controller
         $tempPath = storage_path('app/public/' . $filename);
         $writer->save($tempPath);
 
+        if (ob_get_length()) {
+            ob_end_clean();
+        }
+
         return response()->download($tempPath);
+    }
+    public function cetakResmi()
+    {
+        $userId = Auth::id();
+        
+        // Fetch all data sorted by semester
+        $pendidikan = Pendidikan::where('user_id', $userId)->orderBy('semester', 'desc')->get();
+        $penelitian = Penelitian::where('user_id', $userId)->orderBy('semester', 'desc')->get();
+        $pengabdian = Pengabdian::where('user_id', $userId)->orderBy('semester', 'desc')->get();
+        $penunjang = Penunjang::where('user_id', $userId)->orderBy('semester', 'desc')->get();
+
+        $grand_totals = [
+            'pendidikan' => $pendidikan->sum('jumlah_angka_kredit'),
+            'penelitian' => $penelitian->sum('jumlah_angka_kredit'),
+            'pengabdian' => $pengabdian->sum('jumlah_angka_kredit'),
+            'penunjang' => $penunjang->sum('jumlah_angka_kredit'),
+        ];
+        $grand_totals['total'] = array_sum($grand_totals);
+
+        return view('rekap.cetak_resmi', compact('pendidikan', 'penelitian', 'pengabdian', 'penunjang', 'grand_totals'));
+    }
+
+    public function destroySemester(Request $request, $semester)
+    {
+        $userId = Auth::id();
+        $decodedSemester = urldecode($semester);
+
+        Pendidikan::where('user_id', $userId)->where('semester', $decodedSemester)->delete();
+        Penelitian::where('user_id', $userId)->where('semester', $decodedSemester)->delete();
+        Pengabdian::where('user_id', $userId)->where('semester', $decodedSemester)->delete();
+        Penunjang::where('user_id', $userId)->where('semester', $decodedSemester)->delete();
+
+        return redirect()->route('rekap.index')->with('success', "Semua data untuk semester $decodedSemester berhasil dihapus.");
     }
 }
 

@@ -10,7 +10,7 @@ class PendidikanController extends Controller
 {
     public function index()
     {
-        $data = Pendidikan::with('buktis')->where('user_id', Auth::id())->get();
+        $data = Pendidikan::with('buktis')->where('user_id', Auth::id())->orderBy('semester', 'desc')->get()->groupBy('semester');
         return view('pendidikan.index', compact('data'));
     }
 
@@ -41,5 +41,19 @@ class PendidikanController extends Controller
             $pendidikan->delete();
         }
         return redirect()->route('pendidikan.index')->with('success', 'Data berhasil dihapus');
+    }
+
+    public function destroySemester(Request $request, $semester)
+    {
+        $decodedSemester = urldecode($semester);
+        if ($decodedSemester === 'Tanpa Semester') {
+            $decodedSemester = null; // or empty string depending on DB, but 'Tanpa Semester' is just visual
+            Pendidikan::where('user_id', Auth::id())->where(function($q) {
+                $q->whereNull('semester')->orWhere('semester', '');
+            })->delete();
+        } else {
+            Pendidikan::where('user_id', Auth::id())->where('semester', $decodedSemester)->delete();
+        }
+        return redirect()->route('pendidikan.index')->with('success', 'Semua data pendidikan semester ini berhasil dihapus');
     }
 }

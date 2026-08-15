@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('pendidikans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('uraian_kegiatan');
+            $table->text('uraian_kegiatan');
             $table->date('tanggal')->nullable();
             $table->string('satuan_hasil')->nullable();
             $table->decimal('volume', 8, 2)->default(0);
             $table->decimal('angka_kredit', 8, 2)->default(0);
             $table->decimal('jumlah_angka_kredit', 8, 2)->default(0);
-            $table->string('keterangan')->nullable();
+            $table->text('keterangan')->nullable();
             $table->timestamps();
         });
     }

@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pengabdian;
+use App\Models\KewajibanKhusus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class PengabdianController extends Controller
+class KewajibanKhususController extends Controller
 {
     public function index()
     {
-        $data = Pengabdian::with('buktis')->where('user_id', Auth::id())->orderBy('semester', 'desc')->get()->groupBy('semester');
-        return view('pengabdian.index', compact('data'));
+        $data = KewajibanKhusus::with('buktis')->where('user_id', Auth::id())->orderBy('semester', 'desc')->get()->groupBy('semester');
+        return view('kewajibankhusus.index', compact('data'));
     }
 
     public function store(Request $request)
@@ -19,7 +19,6 @@ class PengabdianController extends Controller
         $request->validate([
             'uraian_kegiatan' => 'required|string',
             'semester' => 'nullable|string',
-            'tanggal' => 'nullable|date',
             'satuan_hasil' => 'nullable|string',
             'volume' => 'required|numeric',
             'angka_kredit' => 'required|numeric',
@@ -30,29 +29,29 @@ class PengabdianController extends Controller
         $data['user_id'] = Auth::id();
         $data['jumlah_angka_kredit'] = $data['volume'] * $data['angka_kredit'];
 
-        Pengabdian::create($data);
+        KewajibanKhusus::create($data);
 
-        return redirect()->route('pengabdian.index')->with('success', 'Data berhasil ditambahkan');
+        return redirect()->route('kewajibankhusus.index')->with('success', 'Data berhasil ditambahkan');
     }
 
-    public function destroy(Pengabdian $pengabdian)
+    public function destroy(KewajibanKhusus $kewajibankhusus)
     {
-        if ($pengabdian->user_id == Auth::id()) {
-            $pengabdian->delete();
+        if ($kewajibankhusus->user_id == Auth::id()) {
+            $kewajibankhusus->delete();
         }
-        return redirect()->route('pengabdian.index')->with('success', 'Data berhasil dihapus');
+        return redirect()->route('kewajibankhusus.index')->with('success', 'Data berhasil dihapus');
     }
 
     public function destroySemester(Request $request, $semester)
     {
         $decodedSemester = urldecode($semester);
         if ($decodedSemester === 'Tanpa Semester') {
-            Pengabdian::where('user_id', Auth::id())->where(function($q) {
+            KewajibanKhusus::where('user_id', Auth::id())->where(function($q) {
                 $q->whereNull('semester')->orWhere('semester', '');
             })->delete();
         } else {
-            Pengabdian::where('user_id', Auth::id())->where('semester', $decodedSemester)->delete();
+            KewajibanKhusus::where('user_id', Auth::id())->where('semester', $decodedSemester)->delete();
         }
-        return redirect()->route('pengabdian.index')->with('success', 'Semua data pengabdian semester ini berhasil dihapus');
+        return redirect()->route('kewajibankhusus.index')->with('success', 'Semua data kewajiban khusus semester ini berhasil dihapus');
     }
 }

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Penunjang') }}
+            {{ __('Kewajiban Khusus') }}
         </h2>
     </x-slot>
 
@@ -9,8 +9,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 
-                <h3 class="text-lg font-bold mb-4">Tambah Data Penunjang</h3>
-                <form action="{{ route('penunjang.store') }}" method="POST" class="mb-8">
+                <h3 class="text-lg font-bold mb-4">Tambah Data Kewajiban Khusus</h3>
+                <form action="{{ route('kewajibankhusus.store') }}" method="POST" class="mb-8">
                     @csrf
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
@@ -57,12 +57,12 @@
                     </div>
                 </form>
 
-                <h3 class="text-lg font-bold mb-4">Data Penunjang</h3>
+                <h3 class="text-lg font-bold mb-4">Data Kewajiban Khusus</h3>
                 @foreach($data as $semester => $items)
                 <div class="mb-8">
                     <div class="flex justify-between items-center bg-gray-100 p-2 rounded mb-2">
                         <h4 class="text-md font-semibold text-gray-700">{{ $semester ?: 'Tanpa Semester' }}</h4>
-                        <form action="{{ route('penunjang.destroySemester', urlencode($semester ?: 'Tanpa Semester')) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus SEMUA data Penunjang pada semester ini?');">
+                        <form action="{{ route('kewajibankhusus.destroySemester', urlencode($semester ?: 'Tanpa Semester')) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus SEMUA data Kewajiban Khusus pada semester ini?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-red-700 bg-red-100 hover:bg-red-200 border border-red-200 px-3 py-1 rounded shadow-sm transition-colors text-xs font-bold">
@@ -113,11 +113,11 @@
                                 <td class="px-4 py-2">
                                     
                                     <div class="flex gap-2">
-                                        <button type="button" onclick="openBuktiModal({{ $item->id }}, 'penunjang')" class="text-blue-600 hover:text-blue-900 bg-blue-100 px-2 py-1 rounded text-xs">Tambah Bukti</button>
-                                        <a href="{{ route('penunjang.edit', $item->id) }}" class="inline-flex items-center px-2 py-1 bg-yellow-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-600 focus:bg-yellow-600 active:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                        <button type="button" onclick="openBuktiModal({{ $item->id }}, 'kewajibankhusus')" class="text-blue-600 hover:text-blue-900 bg-blue-100 px-2 py-1 rounded text-xs">Tambah Bukti</button>
+                                        <a href="{{ route('kewajibankhusus.edit', $item->id) }}" class="inline-flex items-center px-2 py-1 bg-yellow-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-600 focus:bg-yellow-600 active:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                             Edit
                                         </a>
-                                        <form action="{{ route('penunjang.destroy', $item->id) }}" method="POST">
+                                        <form action="{{ route('kewajibankhusus.destroy', $item->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>

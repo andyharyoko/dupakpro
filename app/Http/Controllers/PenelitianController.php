@@ -10,7 +10,7 @@ class PenelitianController extends Controller
 {
     public function index()
     {
-        $data = Penelitian::with('buktis')->where('user_id', Auth::id())->get();
+        $data = Penelitian::with('buktis')->where('user_id', Auth::id())->orderBy('semester', 'desc')->get()->groupBy('semester');
         return view('penelitian.index', compact('data'));
     }
 
@@ -41,5 +41,18 @@ class PenelitianController extends Controller
             $penelitian->delete();
         }
         return redirect()->route('penelitian.index')->with('success', 'Data berhasil dihapus');
+    }
+
+    public function destroySemester(Request $request, $semester)
+    {
+        $decodedSemester = urldecode($semester);
+        if ($decodedSemester === 'Tanpa Semester') {
+            Penelitian::where('user_id', Auth::id())->where(function($q) {
+                $q->whereNull('semester')->orWhere('semester', '');
+            })->delete();
+        } else {
+            Penelitian::where('user_id', Auth::id())->where('semester', $decodedSemester)->delete();
+        }
+        return redirect()->route('penelitian.index')->with('success', 'Semua data penelitian semester ini berhasil dihapus');
     }
 }
