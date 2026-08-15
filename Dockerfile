@@ -13,7 +13,12 @@ RUN apt-get update && apt-get install -y \
     sqlite3 \
     libsqlite3-dev \
     nodejs \
-    npm
+    npm \
+    python3 \
+    python3-pip
+
+# Install Python dependencies for PDF parsing
+RUN pip3 install pdfplumber --break-system-packages
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
