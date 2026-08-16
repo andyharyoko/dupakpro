@@ -15,7 +15,12 @@ class SysadminController extends Controller
             'pengabdians',
             'penunjangs',
             'kewajiban_khususes'
-        ])->orderBy('created_at', 'desc')->get();
+        ])
+        ->withSum('pendidikans', 'jumlah_angka_kredit')
+        ->withSum('penelitians', 'jumlah_angka_kredit')
+        ->withSum('pengabdians', 'jumlah_angka_kredit')
+        ->withSum('penunjangs', 'jumlah_angka_kredit')
+        ->orderBy('created_at', 'desc')->get();
 
         return view('sysadmin.index', compact('users'));
     }

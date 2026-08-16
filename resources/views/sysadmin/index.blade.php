@@ -41,16 +41,20 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 text-center">
-                                        <span class="font-semibold text-indigo-600">{{ $user->pendidikans_count }}</span>
+                                        <div class="font-semibold text-indigo-600">{{ $user->pendidikans_count }} Item</div>
+                                        <div class="text-xs text-slate-500 mt-1">AK: {{ number_format($user->pendidikans_sum_jumlah_angka_kredit ?? 0, 2) }}</div>
                                     </td>
                                     <td class="px-6 py-4 text-center">
-                                        <span class="font-semibold text-blue-600">{{ $user->penelitians_count }}</span>
+                                        <div class="font-semibold text-blue-600">{{ $user->penelitians_count }} Item</div>
+                                        <div class="text-xs text-slate-500 mt-1">AK: {{ number_format($user->penelitians_sum_jumlah_angka_kredit ?? 0, 2) }}</div>
                                     </td>
                                     <td class="px-6 py-4 text-center">
-                                        <span class="font-semibold text-emerald-600">{{ $user->pengabdians_count }}</span>
+                                        <div class="font-semibold text-emerald-600">{{ $user->pengabdians_count }} Item</div>
+                                        <div class="text-xs text-slate-500 mt-1">AK: {{ number_format($user->pengabdians_sum_jumlah_angka_kredit ?? 0, 2) }}</div>
                                     </td>
                                     <td class="px-6 py-4 text-center">
-                                        <span class="font-semibold text-amber-600">{{ $user->penunjangs_count }}</span>
+                                        <div class="font-semibold text-amber-600">{{ $user->penunjangs_count }} Item</div>
+                                        <div class="text-xs text-slate-500 mt-1">AK: {{ number_format($user->penunjangs_sum_jumlah_angka_kredit ?? 0, 2) }}</div>
                                     </td>
                                 </tr>
                                 @endforeach
