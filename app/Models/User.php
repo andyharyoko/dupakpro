@@ -27,6 +27,30 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-        ];
+    }
+
+    public function pendidikans()
+    {
+        return $this->hasMany(Pendidikan::class);
+    }
+
+    public function penelitians()
+    {
+        return $this->hasMany(Penelitian::class);
+    }
+
+    public function pengabdians()
+    {
+        return $this->hasMany(Pengabdian::class);
+    }
+
+    public function penunjangs()
+    {
+        return $this->hasMany(Penunjang::class);
+    }
+
+    public function kewajiban_khususes()
+    {
+        return $this->hasMany(KewajibanKhusus::class);
     }
 }

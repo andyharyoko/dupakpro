@@ -46,6 +46,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/rekap/export-excel', [App\Http\Controllers\RekapController::class, 'exportExcel'])->name('rekap.exportExcel');
     Route::get('/rekap/cetak-resmi', [App\Http\Controllers\RekapController::class, 'cetakResmi'])->name('rekap.cetakResmi');
     Route::delete('/rekap/semester/{semester}', [App\Http\Controllers\RekapController::class, 'destroySemester'])->name('rekap.destroySemester')->where('semester', '.*');
+
+    // Sysadmin routes
+    Route::middleware(function ($request, $next) {
+        if (auth()->user()->email !== 'andyharyoko@gmail.com') {
+            abort(403, 'Unauthorized access.');
+        }
+        return $next($request);
+    })->group(function () {
+        Route::get('/sysadmin/users', [App\Http\Controllers\SysadminController::class, 'index'])->name('sysadmin.users');
+    });
 });
 
 require __DIR__.'/auth.php';

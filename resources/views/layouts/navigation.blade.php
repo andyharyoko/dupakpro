@@ -60,6 +60,17 @@
             <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
             <span class="font-medium">Rekap & Export</span>
         </a>
+
+        @if(auth()->check() && auth()->user()->email === 'andyharyoko@gmail.com')
+        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-6 px-2">
+            Sysadmin
+        </div>
+        
+        <a href="{{ route('sysadmin.users') }}" class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 hover:scale-[1.02] {{ request()->routeIs('sysadmin.*') ? 'bg-gradient-to-r from-indigo-600 to-blue-500 text-white shadow-lg shadow-indigo-500/30' : 'text-slate-600 hover:bg-white/80 hover:text-indigo-600 hover:shadow-sm' }}">
+            <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <span class="font-medium">Kelola Users</span>
+        </a>
+        @endif
     </div>
 
     <!-- Bottom Settings/Logout -->
