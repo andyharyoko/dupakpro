@@ -25,6 +25,31 @@ class SysadminController extends Controller
         return view('sysadmin.index', compact('users'));
     }
 
+    public function show($id)
+    {
+        $user = User::with([
+            'pendidikans' => function($q) { $q->orderBy('created_at', 'desc'); },
+            'penelitians' => function($q) { $q->orderBy('created_at', 'desc'); },
+            'pengabdians' => function($q) { $q->orderBy('created_at', 'desc'); },
+            'penunjangs' => function($q) { $q->orderBy('created_at', 'desc'); },
+            'kewajiban_khususes' => function($q) { $q->orderBy('created_at', 'desc'); }
+        ])
+        ->withCount([
+            'pendidikans',
+            'penelitians',
+            'pengabdians',
+            'penunjangs',
+            'kewajiban_khususes'
+        ])
+        ->withSum('pendidikans', 'jumlah_angka_kredit')
+        ->withSum('penelitians', 'jumlah_angka_kredit')
+        ->withSum('pengabdians', 'jumlah_angka_kredit')
+        ->withSum('penunjangs', 'jumlah_angka_kredit')
+        ->findOrFail($id);
+
+        return view('sysadmin.show', compact('user'));
+    }
+
     public function destroy($id)
     {
         $user = User::findOrFail($id);
