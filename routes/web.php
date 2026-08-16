@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
     // Sysadmin routes
     Route::middleware([\App\Http\Middleware\IsSysadmin::class])->group(function () {
         Route::get('/sysadmin/users', [App\Http\Controllers\SysadminController::class, 'index'])->name('sysadmin.users');
+        Route::delete('/sysadmin/users/{id}', [App\Http\Controllers\SysadminController::class, 'destroy'])->name('sysadmin.users.destroy');
     });
 });
 

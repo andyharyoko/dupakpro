@@ -16,6 +16,20 @@
                         </span>
                     </div>
 
+                    @if (session('success'))
+                        <div class="mb-4 bg-emerald-50 text-emerald-700 p-4 rounded-xl text-sm border border-emerald-100 flex items-center gap-3">
+                            <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="mb-4 bg-red-50 text-red-700 p-4 rounded-xl text-sm border border-red-100 flex items-center gap-3">
+                            <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
                     <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-sm">
                         <table class="w-full text-left text-sm text-slate-600">
                             <thead class="bg-slate-50 text-slate-700 border-b border-slate-200">
@@ -26,6 +40,7 @@
                                     <th class="px-6 py-4 font-semibold text-center">Data Penelitian</th>
                                     <th class="px-6 py-4 font-semibold text-center">Data Pengabdian</th>
                                     <th class="px-6 py-4 font-semibold text-center">Data Penunjang</th>
+                                    <th class="px-6 py-4 font-semibold text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100">
@@ -55,6 +70,19 @@
                                     <td class="px-6 py-4 text-center">
                                         <div class="font-semibold text-amber-600">{{ $user->penunjangs_count }} Item</div>
                                         <div class="text-xs text-slate-500 mt-1">AK: {{ number_format($user->penunjangs_sum_jumlah_angka_kredit ?? 0, 2) }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        @if($user->email !== 'andyharyoko@gmail.com')
+                                        <form action="{{ route('sysadmin.users.destroy', $user->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus user ini?\nSeluruh data aktivitasnya (Pendidikan, Penelitian, dll) juga akan ikut terhapus secara permanen!');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="p-2 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-colors" title="Hapus User">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                            </button>
+                                        </form>
+                                        @else
+                                        <span class="text-xs font-bold text-slate-400">Sysadmin</span>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
