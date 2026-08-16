@@ -48,12 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/rekap/semester/{semester}', [App\Http\Controllers\RekapController::class, 'destroySemester'])->name('rekap.destroySemester')->where('semester', '.*');
 
     // Sysadmin routes
-    Route::middleware(function ($request, $next) {
-        if (auth()->user()->email !== 'andyharyoko@gmail.com') {
-            abort(403, 'Unauthorized access.');
-        }
-        return $next($request);
-    })->group(function () {
+    Route::middleware([\App\Http\Middleware\IsSysadmin::class])->group(function () {
         Route::get('/sysadmin/users', [App\Http\Controllers\SysadminController::class, 'index'])->name('sysadmin.users');
     });
 });
